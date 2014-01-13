@@ -1,1 +1,0 @@
-Phrase Profiler loads subtitles files, and finds the most used words and phrases.

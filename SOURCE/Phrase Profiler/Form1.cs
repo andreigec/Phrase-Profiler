@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using ANDREICSLIB;
 using ANDREICSLIB.ClassExtras;
+using Phrase_Profiler.ServiceReference1;
 
 namespace Phrase_Profiler
 {
@@ -23,12 +24,8 @@ namespace Phrase_Profiler
         #region licensing
 
         private const string AppTitle = "Phrase Profiler";
-        private const double AppVersion = 0.1;
+        private const double AppVersion = 0.2;
         private const String HelpString = "";
-
-        private const String UpdatePath = "https://github.com/EvilSeven/Phrase-Profiler/zipball/master";
-        private const String VersionPath = "https://raw.github.com/EvilSeven/Phrase-Profiler/master/INFO/version.txt";
-        private const String ChangelogPath = "https://raw.github.com/EvilSeven/Phrase-Profiler/master/INFO/changelog.txt";
 
         private readonly String OtherText =
             @"©" + DateTime.Now.Year +
@@ -63,7 +60,7 @@ Zip Assets © SharpZipLib (http://www.sharpdevelop.net/OpenSource/SharpZipLib/)
                 text += fi.Name;
             }
 
-            text = StringUpdates.Truncate(text, 100);
+            text = StringExtras.Truncate(text, 100);
             Text = defaultTitle + " - " + text;
 
             var op = new textoptions(ignoreHTML.Checked, ignoreNonAlphabetCharactersToolStripMenuItem.Checked);
@@ -110,7 +107,8 @@ Zip Assets © SharpZipLib (http://www.sharpdevelop.net/OpenSource/SharpZipLib/)
         private void Form1_Load(object sender, EventArgs e)
         {
             SetControlsEnable(false);
-            Licensing.CreateLicense(this, HelpString, AppTitle, AppVersion, OtherText, VersionPath, UpdatePath, ChangelogPath, menuStrip1);
+            Licensing.CreateLicense(this, menuStrip1, new Licensing.SolutionDetails(GetDetails, HelpString, AppTitle, AppVersion, OtherText));
+
             defaultTitle = Text;
             loadConfig();
             if (savebox.Checked==false)
@@ -120,6 +118,33 @@ Zip Assets © SharpZipLib (http://www.sharpdevelop.net/OpenSource/SharpZipLib/)
             }
             excludedItems.ListViewItemSorter = excludedSort;
             requiredItems.ListViewItemSorter = requiredSort;
+        }
+
+        public Licensing.DownloadedSolutionDetails GetDetails()
+        {
+            try
+            {
+                var sr = new ServicesClient();
+                var ti = sr.GetTitleInfo(AppTitle);
+                if (ti == null)
+                    return null;
+                return ToDownloadedSolutionDetails(ti);
+
+            }
+            catch (Exception)
+            {
+            }
+            return null;
+        }
+
+        public static Licensing.DownloadedSolutionDetails ToDownloadedSolutionDetails(TitleInfoServiceModel tism)
+        {
+            return new Licensing.DownloadedSolutionDetails()
+            {
+                ZipFileLocation = tism.LatestTitleDownloadPath,
+                ChangeLog = tism.LatestTitleChangelog,
+                Version = tism.LatestTitleVersion
+            };
         }
 
         public void saveConfig()
@@ -227,7 +252,7 @@ Zip Assets © SharpZipLib (http://www.sharpdevelop.net/OpenSource/SharpZipLib/)
         {
             removeBRC.Enabled = false;
 
-            var lv=(ListView)ContextMenuStripUpdates.GetContextParent(sender, typeof (ListView));
+            var lv = (ListView)ContextMenuStripExtras.GetContextParent(sender, typeof(ListView));
             if (lv == null)
                 return;
                 removeBRC.Enabled = lv.SelectedItems.Count != 0;
@@ -235,7 +260,7 @@ Zip Assets © SharpZipLib (http://www.sharpdevelop.net/OpenSource/SharpZipLib/)
 
         private void removeBRC_Click(object sender, EventArgs e)
         {
-            var lb = ContextMenuStripUpdates.GetContextParent(sender, typeof(ListView)) as ListView;
+            var lb = ContextMenuStripExtras.GetContextParent(sender, typeof(ListView)) as ListView;
             if (lb == null)
                 return;
 

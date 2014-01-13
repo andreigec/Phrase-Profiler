@@ -76,7 +76,7 @@ namespace Phrase_Profiler
             foreach (var s in sentences)
             {
                 //get all combos
-                var xx = ListUpdates.GetAllCombinations(s, 2, -1).OrderByDescending(pair => pair.Count).ToList();
+                var xx = ListExtras.GetAllCombinations(s, 2, -1).OrderByDescending(pair => pair.Count).ToList();
                 if (xx.Count == 0)
                     continue;
 

@@ -86,7 +86,7 @@ namespace Phrase_Profiler
             {
                 s.Points.AddXY(kvp.Key, kvp.Value);
                 var dpc = s.Points[s.Points.Count - 1];
-                dpc.Color = ColorUpdates.getColourFromInt(kvp.Value, 0, fmax);
+                dpc.Color = ColorExtras.getColourFromInt(kvp.Value, 0, fmax);
                 dpc.ToolTip = kvp.Key + ":" + kvp.Value;
             }
 
@@ -106,7 +106,7 @@ namespace Phrase_Profiler
             ca.AxisX2.ScaleView.Position=rawValues.Count-ca.AxisX2.ScaleView.Size;
             
             ca.AxisX2.Interval = 1;
-            ca.AxisY.Interval = MathUpdates.Ceiling((Math.Abs(fmax) - Math.Abs(fmin)) / 8);
+            ca.AxisY.Interval = MathExtras.Ceiling((Math.Abs(fmax) - Math.Abs(fmin)) / 8);
             if (ca.AxisY.Interval<1)
                 ca.AxisY.Interval = 1;
 
@@ -126,7 +126,7 @@ namespace Phrase_Profiler
             {
                 save += dp.AxisLabel + "," + dp.YValues[0]+"\r\n";
             }
-            FileUpdates.SaveToFile(StringUpdates.replaceAllChars(filename,":","_"), save);
+            FileExtras.SaveToFile(StringExtras.ReplaceAllChars(filename,":","_"), save);
         }
 
 

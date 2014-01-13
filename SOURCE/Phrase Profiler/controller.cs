@@ -23,7 +23,7 @@ namespace Phrase_Profiler
             var files = "";
             foreach (var f in filename)
             {
-                var s = FileUpdates.LoadFile(f);
+                var s = FileExtras.LoadFile(f);
                 if (s == null)
                     return f;
 
@@ -69,7 +69,7 @@ namespace Phrase_Profiler
                     sentence1 = Regex.Replace(sentence1, "<.*?>", "");
 
                 if (options.ignoreNonAlpha)
-                    sentence1 = StringUpdates.RemoveAllNonAlphabetChars(sentence1);
+                    sentence1 = StringExtras.RemoveAllNonAlphabetChars(sentence1);
 
                 //trim trailing whitespace
                 sentence1 = sentence1.Trim(sepWordChar);
