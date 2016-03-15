@@ -14,7 +14,6 @@ using ANDREICSLIB;
 using ANDREICSLIB.ClassExtras;
 using ANDREICSLIB.Helpers;
 using ANDREICSLIB.Licensing;
-using Phrase_Profiler.ServiceReference1;
 
 namespace Phrase_Profiler
 {
